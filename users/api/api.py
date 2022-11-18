@@ -64,17 +64,19 @@ def user_api_view(request):
         users = User.objects.all()
         users_serializer = UserSerializer(users, many = True)
         
-        #testing de serializer
-        test_data = {
-            'name': 'gdrgrd',
-            'email': 'gdrgrd@gmial.com'
-        }
-        test_user = TestUserSerializer(data= test_data, context= test_data)
-        if test_user.is_valid():
-            print('successfully validations')
-        else:
-            print(test_user.errors)
-
+        # Testing de serializer
+        # test_data = {
+        #     'name': 'sefsefsef',
+        #     'email': 'thtf@gmial.com'
+        # }
+        # test_user = TestUserSerializer(data= test_data, context= test_data)
+        # if test_user.is_valid():
+        #     pass
+        #     # user_instance = test_user.save()
+        #     # print(user_instance)
+        #     # print('successfully validations')
+        # else:
+        #     print(test_user.errors)
 
         return Response(users_serializer.data, status.HTTP_200_OK)
 
