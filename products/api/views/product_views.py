@@ -1,13 +1,16 @@
 from base.api import GeneralListApiView
+from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 from products.api.serializers.product_serializer import ProductSerializer
 from rest_framework import generics
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework import permissions
 
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
-    queryset = ProductSerializer.Meta.model.objects.filter(state = True)
+    permission_classes = [permissions.AllowAny]
+    parser_classes = (JSONParser,FormParser,MultiPartParser)
 
     def get_queryset(self, pk=None):
         if pk is None:
@@ -15,9 +18,9 @@ class ProductViewSet(viewsets.ModelViewSet):
         else:
             return self.get_serializer().Meta.model.objects.filter(id = pk, state = True).first()
 
-    def list(self, request):
+    def list(self, request, pk=None):
         print('List')
-        product_serializer = self.get_serializer(self.get_queryset(), many = True)
+        product_serializer = self.serializer_class(self.get_queryset(pk), many = True)
         return Response(product_serializer.data, status.HTTP_200_OK)
 
     def create(self, request):
